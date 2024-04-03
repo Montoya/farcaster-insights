@@ -1,36 +1,42 @@
-import type { OnRpcRequestHandler } from '@metamask/snaps-sdk';
-import { panel, text } from '@metamask/snaps-sdk';
+import type { OnTransactionHandler } from '@metamask/snaps-sdk';
+import { panel, heading, text, row } from '@metamask/snaps-sdk';
 
-/**
- * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
- *
- * @param args - The request handler args as object.
- * @param args.origin - The origin of the request, e.g., the website that
- * invoked the snap.
- * @param args.request - A validated JSON-RPC request object.
- * @returns The result of `snap_dialog`.
- * @throws If the request method is not valid for this snap.
- */
-export const onRpcRequest: OnRpcRequestHandler = async ({
-  origin,
-  request,
-}) => {
-  switch (request.method) {
-    case 'hello':
-      return snap.request({
-        method: 'snap_dialog',
-        params: {
-          type: 'confirmation',
-          content: panel([
-            text(`Hello, **${origin}**!`),
-            text('This custom confirmation is just for display purposes.'),
-            text(
-              'But you can edit the snap source code to make it do something, if you want to!',
-            ),
-          ]),
-        },
-      });
-    default:
-      throw new Error('Method not found.');
+// Handle outgoing transactions.
+export const onTransaction: OnTransactionHandler = async ({ transaction }) => {
+
+  if(transaction.to) { 
+    // assume a valid address
+
+    const response = await fetch(`https://homerow.club/fc/name.php?address=${transaction.to}`); 
+
+    const data = await response.json(); 
+
+    const insights = []; 
+
+    if(data[transaction.to]) { 
+      const user = data[transaction.to][0]; 
+      insights.push(text("This is a known Farcaster account:")); 
+      if(user.custody_address===transaction.to) { 
+        insights.push(row("Address Type",text("Custody Address"))); 
+      }
+      else { 
+        insights.push(row("Address Type",text("Verified Address"))); 
+      }
+      insights.push(row("Username", text(`[${user.username}](https://warpcast.com/${user.username})`))); 
+      insights.push(row("Display Name", text(user.display_name))); 
+      insights.push(row("Follower Count",text(''+user.follower_count))); 
+    }
+    else { 
+      insights.push(text("This is not a known Farcaster account.")); 
+    }
+    return {
+        content: panel([
+            heading("Farcaster Insights"),
+            ...insights,
+        ]),
+    };
+  } 
+  else { 
+    return null; 
   }
 };
