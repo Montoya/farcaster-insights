@@ -1,7 +1,7 @@
 {
   "name": "farcaster-insights",
-  "version": "1.0.0",
-  "description": "MetaMask Snap transaction insights with Farcaster data.",
+  "version": "1.0.1",
+  "description": "MetaMask transaction insights with Farcaster data.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Montoya/farcaster-insights.git"

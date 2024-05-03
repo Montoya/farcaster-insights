@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transaction insights with Farcaster data",
   "proposedName": "Farcaster Insights",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "git+https://github.com/Montoya/farcaster-insights.git"
   },
   "source": {
-    "shasum": "0mreu0VEQPDnsqeZaHqsBnmLMGEhtMvXDrat+cKsxaQ=",
+    "shasum": "rlnPhLEb7Vt07iMQSPyRVgktnEzOzBooVB6vGZeToMU=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -19,7 +19,8 @@
   },
   "initialPermissions": {
     "endowment:transaction-insight": {},
-    "endowment:network-access": {}
+    "endowment:network-access": {},
+    "endowment:page-home": {}
   },
   "manifestVersion": "0.1"
 }
